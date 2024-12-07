@@ -19,15 +19,13 @@ app.get("/proxy/countries", async (req, res) => {
   }
 });
 
+// Serve static files from the frontend
+app.use(express.static(path.join(__dirname, "../frontend/dist")));
 
-if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, 'frontend', 'dist')));
-
-  
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'frontend', 'dist', 'index.html'));
-  });
-}
+// Fallback for SPA routes
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/dist/index.html"));
+});
 
 // 
 app.listen(PORT, () => {
